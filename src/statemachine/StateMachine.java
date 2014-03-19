@@ -12,7 +12,8 @@ import java.util.Set;
  * Functions send, init and receive are given in the constructor.
  *
  * The function receive doesn't have to be defined on stopping states, since in
- * that case the state can't change.
+ * that case the state can't change. The functions may also remain undefined with
+ * inputs that will never occur.
  *
  * The maps sendFunctionDefaults, initFunctionDefaults and
  * receiveFunctionDefaults can be used to set default behavior for nodes in

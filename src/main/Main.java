@@ -16,20 +16,13 @@ public class Main {
 
     public static void main(String[] args) {
         IStateMachine stateMachine = Lecture1803.getStateMachine();
-        List<INode> path = Lecture1803.getFiveNodePath();
-        List<Input> inputs = Lecture1803.getInputs(5);
+        List<INode> path = Lecture1803.getFourNodePath();
+        List<Input> inputs = Lecture1803.getInputs(4);
         
-//        stateMachine.setNodes(path);        
-//        stateMachine.initializeNodes(inputs);
-
         AlgorithmRunner runner = new AlgorithmRunner(stateMachine, path);
         
         runner.runAlgorithm(inputs);
-        
 
-//        while (!stateMachine.hasStopped()) {
-//            stateMachine.executeRound();
-//        }        
         System.out.println(runner.getNodes());
         System.out.println("Algorithm ran for " + runner.getRoundsRun() + " rounds");
     }

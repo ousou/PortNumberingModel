@@ -32,33 +32,15 @@ public interface IStateMachine {
     State processIncomingMessage(State state, Message[] messages);
 
     /**
-     * Retrieves all nodes connected to the state machine.
+     * Gets the initial state for an input.
      * 
-     * @return List of nodes
+     * @param degree Degree of node
+     * @param input Input
+     * @return Initial state
      */
-    List<Node> getNodes();
+    State getInitialState(int degree, Input input);
     
-    /**
-     * Executes a round of the algorithm.
-     */
-    
-    void executeRound();
-    
-    /**
-     * Initializes the nodes connected to the state machine.
-     * 
-     * @param inputs List of nodes.
-     */
-    
-    void initializeNodes(List<Input> inputs);
-    
-    /**
-     * Returns number of rounds run.
-     * 
-     * @return 
-     */
-    int getNumberOfRoundsRun();
-    
+  
     /**
      * Gets all valid inputs.
      * 
@@ -67,17 +49,4 @@ public interface IStateMachine {
     
     Set<Input> getValidInputs();
     
-    /**
-     * Tells if all nodes have stopped.
-     * 
-     * @return 
-     */
-    boolean hasStopped();
-    
-    /**
-     * Sets the nodes to the machine.
-     * 
-     * @param nodes 
-     */
-    void setNodes(List<Node> nodes);
 }

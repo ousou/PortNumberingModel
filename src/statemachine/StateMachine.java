@@ -7,45 +7,62 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import network.Node;
 
 /**
  * Functions send, init and receive are given in the constructor.
- * 
- * The function receive doesn't have to be defined on stopping states,
- * since in that case the state can't change.
- * 
+ *
+ * The function receive doesn't have to be defined on stopping states, since in
+ * that case the state can't change.
+ *
+ * The maps sendFunctionDefaults, initFunctionDefaults and
+ * receiveFunctionDefaults can be used to set default behavior for nodes in
+ * certain states. If the corresponding function isn't specified in some point,
+ * then the state machine reverts to the default behavior found.
+ *
+ * Using the default functions is not mandatory.
+ *
  * @author Sebastian Björkqvist
  */
 public class StateMachine implements IStateMachine {
 
-    private List<Node> nodes;
     private final Map<Integer, Map<State, Message[]>> sendFunctions;
+    private Map<Integer, Message[]> sendFunctionDefaults;
     private final Map<Integer, Map<Input, State>> initFunctions;
+    private Map<Integer, State> initFunctionDefaults;
     private final Map<State, Map<List<Message>, State>> receiveFunctions;
-    private int roundCounter;
+    private Map<State, Map<Integer, State>> receiveFunctionDefaults;
 
-    public StateMachine(Map<Integer, Map<State, Message[]>> sendFunctions, 
-            Map<Integer, Map<Input, State>> initFunctions, 
+    public StateMachine(Map<Integer, Map<State, Message[]>> sendFunctions,
+            Map<Integer, Map<Input, State>> initFunctions,
             Map<State, Map<List<Message>, State>> receiveFunctions) {
         this.sendFunctions = sendFunctions;
         this.initFunctions = initFunctions;
         this.receiveFunctions = receiveFunctions;
-        this.roundCounter = 0;
     }
 
-    @Override
-    public void setNodes(List<Node> nodes) {
-        this.roundCounter = 0;        
-        this.nodes = nodes;
+    public StateMachine(Map<Integer, Map<State, Message[]>> sendFunctions,
+            Map<Integer, Message[]> sendFunctionDefaults,
+            Map<Integer, Map<Input, State>> initFunctions,
+            Map<Integer, State> initFunctionDefaults,
+            Map<State, Map<List<Message>, State>> receiveFunctions,
+            Map<State, Map<Integer, State>> receiveFunctionDefaults) {
+        this.sendFunctions = sendFunctions;
+        this.sendFunctionDefaults = sendFunctionDefaults;
+        this.initFunctions = initFunctions;
+        this.initFunctionDefaults = initFunctionDefaults;
+        this.receiveFunctions = receiveFunctions;
+        this.receiveFunctionDefaults = receiveFunctionDefaults;
     }
-    
+
     @Override
     public Message[] getOutgoingMessage(int degree, State state) {
         Message[] toReturn = sendFunctions.get(degree).get(state);
         if (toReturn == null) {
-            throw new RuntimeException("No message found for state " + 
-                    state.getName() + ", degree " + degree);
+            toReturn = sendFunctionDefaults.get(degree);
+            if (toReturn == null) {
+                throw new RuntimeException("No message found for state "
+                        + state.getName() + ", degree " + degree);
+            }
         }
         if (toReturn.length != degree) {
             throw new RuntimeException("Message length different than degree!");
@@ -58,60 +75,33 @@ public class StateMachine implements IStateMachine {
         if (state.isOutputState()) {
             return state;
         }
-        
+
         List<Message> msgs = new ArrayList<Message>();
         msgs.addAll(Arrays.asList(messages));
-        
+
         State toReturn = receiveFunctions.get(state).get(msgs);
         if (toReturn == null) {
-            throw new RuntimeException("No message found for state " + 
-                    state.getName() + ", messages " + msgs);
-        }        
+            toReturn = receiveFunctionDefaults.get(state).get(msgs.size());
+            if (toReturn == null) {
+                throw new RuntimeException("No message found for state "
+                        + state.getName() + ", messages " + msgs);
+            }
+        }
         return toReturn;
     }
 
     @Override
-    public List<Node> getNodes() {
-        return new ArrayList<Node>(nodes);
-    }   
-
-    @Override
-    public void executeRound() {
-        if (nodes == null || nodes.isEmpty()) {
-            throw new RuntimeException("No nodes have been given to the machine!");
-        }
-        for (Node n : nodes) {
-            n.sendMessages();
-        }
-        for (Node n : nodes) {
-            n.updateState();
-        }        
-        roundCounter++;
-    }
-
-    @Override
-    public void initializeNodes(List<Input> inputs) {
-        if (nodes == null || nodes.isEmpty()) {
-            throw new RuntimeException("No nodes have been given to the machine!");
-        }
-        if (inputs == null || inputs.size() != nodes.size()) {
-            throw new IllegalArgumentException("Input list size different than node list size!");
-        }
-        this.roundCounter = 0;        
-        for (int i = 0; i < inputs.size(); i++) {
-            int degree = nodes.get(i).getDegree();
-            State initState = initFunctions.get(degree).get(inputs.get(i));
+    public State getInitialState(int degree, Input input) {
+        State initState = initFunctions.get(degree).get(input);
+        if (initState == null) {
+            initState = initFunctionDefaults.get(degree);
             if (initState == null) {
-                throw new RuntimeException("No initial state found for input " 
-                        + inputs.get(i) + " degree " + degree);
+                throw new RuntimeException("No initial state found for input "
+                        + input + " degree " + degree);
             }
-            nodes.get(i).setInitialState(initState);
-        }        
-    }
+        }
 
-    @Override
-    public int getNumberOfRoundsRun() {
-        return roundCounter;
+        return initState;
     }
 
     @Override
@@ -123,18 +113,4 @@ public class StateMachine implements IStateMachine {
         }
         return inputs;
     }
-
-    @Override
-    public boolean hasStopped() {
-        if (nodes == null || nodes.isEmpty()) {
-            throw new RuntimeException("No nodes have been given to the machine!");            
-        }
-        for (Node n : nodes) {
-            if (!n.getCurrentState().isOutputState()) {
-                return false;
-            }
-        }        
-        return true;
-    }
-    
 }

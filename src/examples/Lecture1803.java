@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import network.ConnectionFunction;
+import network.INode;
 import network.Node;
 import network.Port;
 import statemachine.IStateMachine;
@@ -116,7 +117,7 @@ public class Lecture1803 {
         return receiveFunctions;
     }
     
-    public static List<Node> getFourNodePath() {
+    public static List<INode> getFourNodePath() {
         List<Node> nodes = new ArrayList<Node>();
         
         Node node1 = new Node("1", 1);
@@ -137,10 +138,14 @@ public class Lecture1803 {
             n.setConnectionFunction(function);
         }
         
-        return nodes;
+        List<INode> inodes = new ArrayList<INode>();
+        
+        inodes.addAll(nodes);
+        
+        return inodes;
     }
     
-    public static List<Node> getFiveNodePath() {
+    public static List<INode> getFiveNodePath() {
         List<Node> nodes = new ArrayList<Node>();
         
         Node node1 = new Node("1", 1);
@@ -164,7 +169,11 @@ public class Lecture1803 {
             n.setConnectionFunction(function);
         }
         
-        return nodes;
+        List<INode> inodes = new ArrayList<INode>();
+        
+        inodes.addAll(nodes);
+        
+        return inodes;
     }    
     
     public static List<Input> getInputs(int size) {

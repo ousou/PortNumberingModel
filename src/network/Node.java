@@ -11,7 +11,7 @@ import statemachine.State;
  * 
  * @author Sebastian Björkqvist
  */
-public class Node {
+public class Node implements INode {
 
     private final int degree;
     private ConnectionFunction connectionFunction;
@@ -36,18 +36,17 @@ public class Node {
         this.connectionFunction = connectionFunction;
     }
 
+    @Override
     public void setInitialState(State initialState) {
         this.currentState = initialState;
     }
 
+    @Override
     public void setStateMachine(IStateMachine stateMachine) {
         this.stateMachine = stateMachine;
     }
-    
-    /**
-     * Sends messages to ports.
-     */
-    
+
+    @Override
     public void sendMessages() {
         if (connectionFunction == null) {
             throw new RuntimeException("No connection function set!");
@@ -60,38 +59,29 @@ public class Node {
             connectedPort.getNode().receiveMessage(msg, connectedPort.getPortNumber());
         }
     }
-    
-    /**
-     * Receives message from a port.
-     * 
-     * @param message Received message
-     * @param port Port
-     */
+
+    @Override
     public void receiveMessage(Message message, int port) {
         receivedMessages[port] = message;
     }
     
-    /**
-     * Updates state using current received messages.
-     */
+    @Override
     public void updateState() {
         currentState = stateMachine.processIncomingMessage(currentState, receivedMessages);        
     }
 
+    @Override
     public int getDegree() {
         return degree;
     }
 
+    @Override
     public State getCurrentState() {
         return currentState;
     }
 
     @Override
     public String toString() {
-        return "Node{" + "degree=" + degree + ", currentState=" + currentState + ", name=" + name + '}';
+        return "Node{" + "name=" + name + ", degree=" + degree + ", currentState=" + currentState + '}';
     }
-    
-    
-    
-    
 }

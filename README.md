@@ -11,3 +11,5 @@ To create a port-numbered network, you first must create the nodes in the networ
 When you have done this, you can create an instance of the class AlgorithmRunner and run the method runAlgorithm, to which you need to give the inputs to the nodes. Note that the inputs are in a list, and the order of elements in the input list correspond to the order of elements in the node list you gave to AlgorithmRunner.
 
 The method runAlgorithm runs until all nodes have stopped. After that, you may examine the states of the nodes by retrieving them using the method getNodes.
+
+See the main method for an example of how to use the class AlgorithmRunner, and the package examples for examples on how to create the state machine and the port-numbered network.

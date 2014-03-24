@@ -57,7 +57,7 @@ public class Main {
                     graph = parser.readNetworkFromInput();
                     inputs = parser.readInputsForNodes(graph);
                     goOn = false;
-                }  else if (input.equals("4")) {
+                } else if (input.equals("4")) {
                     List<Node> exampleGraph = ExampleGraphs.getExampleVC3Graph();
                     VC3Algorithm algorithm = new VC3Algorithm(exampleGraph);
                     int rounds = algorithm.runAlgorithm();
@@ -65,7 +65,25 @@ public class Main {
                     finished.addAll(exampleGraph);
                     printNodes(finished, rounds);
                     goOn = true;
-                }  else if (input.equals("5")) {
+                } else if (input.equals("5")) {
+                    System.out.println("");
+                    System.out.println("Running VC3 on following network "
+                            + "(ports are given in ascending order):");
+                    System.out.println("Node 0, Neighbors: 4,1");
+                    System.out.println("Node 1, Neighbors: 5,2,0,3");
+                    System.out.println("Node 2, Neighbors: 1");
+                    System.out.println("Node 3, Neighbors: 1,4");
+                    System.out.println("Node 4, Neighbors: 3,0,5"); 
+                    System.out.println("Node 5, Neighbors: 4,1"); 
+                    System.out.println("This graph has vertex cover {1,4}.");
+                    List<Node> exampleGraph = ExampleGraphs.getVC3TightnessProofGraph();
+                    VC3Algorithm algorithm = new VC3Algorithm(exampleGraph);
+                    int rounds = algorithm.runAlgorithm();
+                    List<INode> finished = new ArrayList<INode>();
+                    finished.addAll(exampleGraph);
+                    printNodes(finished, rounds);
+                    goOn = true;
+                } else if (input.equals("6")) {
                     NetworkParser parser = new NetworkParser();
                     List<INode> graphParsed = parser.readNetworkFromInput();
                     List<Node> castGraph = new ArrayList<Node>();
@@ -104,7 +122,8 @@ public class Main {
         System.out.println("2) Simulate the BMM algorithm on the port-numbered network found in Figure 2.5 in the book");
         System.out.println("3) Simulate the BMM algorithm on a network of your choosing");
         System.out.println("4) Simulate the VC3 algorithm on the port-numbered network found in Figure 2.7 in the book");
-        System.out.println("5) Simulate the VC3 algorithm on a network of your choosing");        
+        System.out.println("5) Prove tightness of analysis of VC3 algorithm on a six-node network."); 
+        System.out.println("6) Simulate the VC3 algorithm on a network of your choosing");        
         System.out.println("x) Exit the program");
         System.out.print("> ");
     }

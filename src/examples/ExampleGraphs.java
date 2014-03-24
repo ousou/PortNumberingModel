@@ -85,4 +85,44 @@ public class ExampleGraphs {
         
         return nodes;
     }
+    
+    /**
+     * Returns graph that when run with the VC3 algorithm returns
+     * a vertex cover that is exactly three times as large as the minimum
+     * vertex cover.
+     * 
+     * @return 
+     */
+    
+    public static List<Node> getVC3TightnessProofGraph() {
+        List<Node> nodes = new ArrayList<Node>();   
+        
+        Node zero = new Node("zero", 2);
+        nodes.add(zero);
+        Node one = new Node("one", 4);
+        nodes.add(one);
+        Node two = new Node("two", 1);
+        nodes.add(two);
+        Node three = new Node("three", 2);
+        nodes.add(three);     
+        Node four = new Node("four", 3);
+        nodes.add(four);         
+        Node five = new Node("five", 2);
+        nodes.add(five);     
+        
+        ConnectionFunction function = new ConnectionFunction();
+        function.addConnection(new Port(zero, 0), new Port(four, 1));
+        function.addConnection(new Port(zero, 1), new Port(one, 2));
+        function.addConnection(new Port(one, 0), new Port(five, 1));
+        function.addConnection(new Port(one, 1), new Port(two, 0));
+        function.addConnection(new Port(one, 3), new Port(three, 0));
+        function.addConnection(new Port(three, 1), new Port(four, 0));
+        function.addConnection(new Port(four, 2), new Port(five, 0));
+        
+        for (Node n : nodes) {
+            n.setConnectionFunction(function);
+        }        
+        
+        return nodes;
+    }
 }

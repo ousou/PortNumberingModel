@@ -64,6 +64,10 @@ public class NetworkParser {
                 }
                 Node other = nodes.get(neighborListN.get(j));
                 Integer secondPortNumber = neighborList.get(neighborListN.get(j)).indexOf(i);
+                if (secondPortNumber < 0) {
+                    throw new IllegalArgumentException("Given function is not an involution! Check"
+                            + " nodes " + n + " and " + other);
+                }
                 Port second = new Port(other, secondPortNumber);
                 function.addConnection(first, second);
             }
@@ -92,6 +96,10 @@ public class NetworkParser {
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input!");
             }
+            if (numberOfNodes < 1) {
+                System.out.println("Invalid input!");
+                numberOfNodes = null;
+            }           
         }
         
         char quote = 34;

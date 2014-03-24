@@ -1,12 +1,14 @@
 package main;
 
-import examples.BMMExampleGraph;
+import examples.ExampleGraphs;
 import examples.Lecture1803;
+import examples.VC3Algorithm;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import network.INode;
 import network.NetworkParser;
+import network.Node;
 import runner.AlgorithmRunner;
 import statemachine.BMM.BMMStateMachine;
 import statemachine.IStateMachine;
@@ -36,7 +38,7 @@ public class Main {
                     inputs = Lecture1803.getInputs(5);
                     goOn = false;
                 } else if (input.equals("2")) {
-                    graph = BMMExampleGraph.getGraph();
+                    graph = ExampleGraphs.getExampleBMMGraph();
                     inputs = new ArrayList<Input>();
                     Input white = new Input("white");
                     Input black = new Input("black");
@@ -55,26 +57,39 @@ public class Main {
                     graph = parser.readNetworkFromInput();
                     inputs = parser.readInputsForNodes(graph);
                     goOn = false;
+                }  else if (input.equals("4")) {
+                    List<Node> exampleGraph = ExampleGraphs.getExampleVC3Graph();
+                    VC3Algorithm algorithm = new VC3Algorithm(exampleGraph);
+                    int rounds = algorithm.runAlgorithm();
+                    List<INode> finished = new ArrayList<INode>();
+                    finished.addAll(exampleGraph);
+                    printNodes(finished, rounds);
+                    goOn = true;
+                }  else if (input.equals("5")) {
+                    NetworkParser parser = new NetworkParser();
+                    List<INode> graphParsed = parser.readNetworkFromInput();
+                    List<Node> castGraph = new ArrayList<Node>();
+                    for (int i = 0; i < graphParsed.size(); i++) {
+                        castGraph.add((Node) graphParsed.get(i));
+                    }
+                    VC3Algorithm algorithm = new VC3Algorithm(castGraph);
+                    int rounds = algorithm.runAlgorithm();
+                    List<INode> finished = new ArrayList<INode>();
+                    finished.addAll(castGraph);
+                    printNodes(finished, rounds);
+                    goOn = true;
                 } else if (input.equalsIgnoreCase("x")) {
                     System.exit(0);
                 } else {
                     System.out.println("Invalid input!");
+                    goOn = true;
                 }
             }
 
 
             AlgorithmRunner runner = new AlgorithmRunner(stateMachine, graph);
             runner.runAlgorithm(inputs);
-
-            System.out.println("");
-
-            System.out.println("The nodes and their states when algorithm stopped: ");
-            List<INode> finishedNodes = runner.getNodes();
-            for (INode node : finishedNodes) {
-                System.out.println(node);
-            }
-            System.out.println("");
-            System.out.println("Algorithm ran for " + runner.getRoundsRun() + " rounds.");
+            printNodes(graph, runner.getRoundsRun());
 
         }
     }
@@ -88,7 +103,20 @@ public class Main {
         System.out.println("1) Simulate the simple algorithm presented on the lecture 18.03 on a five node path graph");
         System.out.println("2) Simulate the BMM algorithm on the port-numbered network found in Figure 2.5 in the book");
         System.out.println("3) Simulate the BMM algorithm on a network of your choosing");
+        System.out.println("4) Simulate the VC3 algorithm on the port-numbered network found in Figure 2.7 in the book");
+        System.out.println("5) Simulate the VC3 algorithm on a network of your choosing");        
         System.out.println("x) Exit the program");
         System.out.print("> ");
+    }
+
+    private static void printNodes(List<INode> graph, int rounds) {
+        System.out.println("");
+
+        System.out.println("The nodes and their states when algorithm stopped: ");
+        for (INode node : graph) {
+            System.out.println(node);
+        }
+        System.out.println("");
+        System.out.println("Algorithm ran for " + rounds + " rounds.");
     }
 }

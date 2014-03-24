@@ -8,13 +8,18 @@ import network.Node;
 import network.Port;
 
 /**
- * Encoding of graph found in the book on page 32, figure 2.5.
+ * Example graphs for the algorithms.
+ * 
+ * Encoding of BMM graph found in the book on page 32, figure 2.5.
+ * 
+ * Encoding of VC3 graph found in the book on page 38, figure 2.7
+ * 
  * 
  * @author Sebastian Björkqvist
  */
-public class BMMExampleGraph {
+public class ExampleGraphs {
 
-    public static List<INode> getGraph() {
+    public static List<INode> getExampleBMMGraph() {
         List<Node> nodes = new ArrayList<Node>();
         
         Node white1 = new Node("white-0", 2);
@@ -54,5 +59,30 @@ public class BMMExampleGraph {
         inodes.addAll(nodes);
         
         return inodes;
+    }
+    
+    public static List<Node> getExampleVC3Graph() {
+        List<Node> nodes = new ArrayList<Node>();   
+        
+        Node zero = new Node("zero", 2);
+        nodes.add(zero);
+        Node one = new Node("one", 2);
+        nodes.add(one);
+        Node two = new Node("two", 3);
+        nodes.add(two);
+        Node three = new Node("three", 1);
+        nodes.add(three);        
+        
+        ConnectionFunction function = new ConnectionFunction();
+        function.addConnection(new Port(zero, 0), new Port(two, 1));
+        function.addConnection(new Port(zero, 1), new Port(one, 0));
+        function.addConnection(new Port(one, 1), new Port(two, 0));
+        function.addConnection(new Port(two, 2), new Port(three, 0));
+        
+        for (Node n : nodes) {
+            n.setConnectionFunction(function);
+        }        
+        
+        return nodes;
     }
 }

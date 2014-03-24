@@ -36,6 +36,10 @@ public class Node implements INode {
         this.connectionFunction = connectionFunction;
     }
 
+    public ConnectionFunction getConnectionFunction() {
+        return connectionFunction;
+    }
+
     @Override
     public void setInitialState(State initialState) {
         this.currentState = initialState;
@@ -50,6 +54,9 @@ public class Node implements INode {
     public void sendMessages() {
         if (connectionFunction == null) {
             throw new RuntimeException("No connection function set!");
+        }
+        if (stateMachine == null) {
+            throw new RuntimeException("No state machine set!");
         }
         Message[] msgList = stateMachine.getOutgoingMessage(degree, currentState);
         

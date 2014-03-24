@@ -8,7 +8,11 @@ import statemachine.Message;
 import statemachine.State;
 
 /**
- *
+ * State machine for the BMM algorithm.
+ * 
+ * The messages used are created here and passed on to nodes.
+ * For naming of states, see the class BMMState.
+ * 
  * @author Sebastian Björkqvist
  */
 public class BMMStateMachine implements IStateMachine {

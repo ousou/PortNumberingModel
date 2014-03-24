@@ -9,12 +9,12 @@ package network;
  */
 public class Port {
 
-    private final Node node;
+    private final INode node;
     private final int portNumber;
 
-    public Port(Node node, int portNumber) {
+    public Port(INode node, int portNumber) {
         if (portNumber < 0) {
-            throw new IllegalArgumentException("Port number must be positive!");
+            throw new IllegalArgumentException("Port number must be non-negative!");
         }
         if (node == null) {
             throw new IllegalArgumentException("Node can't be null!");
@@ -49,7 +49,7 @@ public class Port {
         return true;
     }
 
-    public Node getNode() {
+    public INode getNode() {
         return node;
     }
 

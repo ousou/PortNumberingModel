@@ -17,22 +17,22 @@ public class BMMExampleGraph {
     public static List<INode> getGraph() {
         List<Node> nodes = new ArrayList<Node>();
         
-        Node white1 = new Node("white-1", 2);
+        Node white1 = new Node("white-0", 2);
         nodes.add(white1);
-        Node white2 = new Node("white-2", 3);
+        Node white2 = new Node("white-1", 3);
         nodes.add(white2);
-        Node white3 = new Node("white-3", 1);
+        Node white3 = new Node("white-2", 1);
         nodes.add(white3);
-        Node white4 = new Node("white-4", 2);
+        Node white4 = new Node("white-3", 2);
         nodes.add(white4);     
         
-        Node black1 = new Node("black-1", 2);
+        Node black1 = new Node("black-0", 2);
         nodes.add(black1);
-        Node black2 = new Node("black-2", 1);
+        Node black2 = new Node("black-1", 1);
         nodes.add(black2);
-        Node black3 = new Node("black-3", 3);
+        Node black3 = new Node("black-2", 3);
         nodes.add(black3);
-        Node black4 = new Node("black-4", 2);
+        Node black4 = new Node("black-3", 2);
         nodes.add(black4);
         
         ConnectionFunction function = new ConnectionFunction();

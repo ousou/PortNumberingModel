@@ -11,6 +11,7 @@ import statemachine.State;
  */
 public interface INode {
 
+    String getName();
     /**
      * Sets the initial state of the node.
      * 

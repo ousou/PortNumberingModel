@@ -84,4 +84,9 @@ public class Node implements INode {
     public String toString() {
         return "Node{" + "name=" + name + ", degree=" + degree + ", currentState=" + currentState + '}';
     }
+
+    @Override
+    public String getName() {
+        return name;
+    }
 }
